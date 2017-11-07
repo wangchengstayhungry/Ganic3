@@ -88,7 +88,7 @@ class XBaseRecord {
             return $this->forceGetString($columnObj);
         } else {
             $result = $this->getObject($columnObj);
-            if ($result && ($columnObj->getType()==DBFFIELD_TYPE_DATETIME || $columnObj->getType()==DBFFIELD_TYPE_DATE)) return @date("r",$result);
+            if ($result && ($columnObj->getType()==DBFFIELD_TYPE_DATETIME || $columnObj->getType()==DBFFIELD_TYPE_DATE)) return date("d/m/y",$result);
             if ($columnObj->getType()==DBFFIELD_TYPE_LOGICAL) return $result?"1":"0";
             return $result;
         }

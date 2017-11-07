@@ -5,6 +5,11 @@
    		
 	class System_utilities extends MY_Controller {
 
+        public function __construct()
+        {
+            parent::__construct();
+            $this->load->model('system_utilities/system_utilities_model','system_master');
+        }   
 	
 		public function backup_database()
 		{
@@ -76,6 +81,26 @@
             }
         }
 
+        function getInsertCustomerDbf()
+        {
+            $customers = $this->system_master->get_customer_master();
+            return $customers;
+        }
+
+        function getInsertReceiptDbf()
+        {
+            $table="receipt_master";
+            $join_table = array('customer_master','currency_master',);
+            $join_condition=array('receipt_master.customer_id = customer_master.customer_id','customer_master.currency_id = currency_master.currency_id');
+            $columns=array("receipt_master.receipt_ref_no","receipt_master.created_on", "customer_master.customer_code", "receipt_master.currency", "currency_master.currency_rate", "receipt_master.amount AS foreign_amount", "receipt_master.amount/currency_master.currency_rate AS local_amount");
+            $table_id="receipt_id";
+
+                
+            $list = $this->system_master->get_datatables($table,$columns,$join_table,$join_condition,null,$table_id);
+            
+            return $list;
+        }
+
         public function export_customer_master()
         {
 
@@ -83,51 +108,120 @@
             require_once "util_github/Record.class.php";
             require_once "util_github/Table.class.php";
             require_once "util_github/WritableTable.class.php";
-           // require_once "util_github/download.php";
-            // require_once "Column.class.php";
-            // require_once "Record.class.php";
-            // require_once "Table.class.php";
-            // require_once "WritableTable.class.php";
-             
+                        
             /* sample data */  
             $fields = array(
-                array("bool" , DBFFIELD_TYPE_LOGICAL),
-                array("memo" , DBFFIELD_TYPE_MEMO),
-                array("date" , DBFFIELD_TYPE_DATE),
-                array("number" , DBFFIELD_TYPE_NUMERIC, 3, 0),
-                array("string" , DBFFIELD_TYPE_CHAR, 50),
+                array("IDEN" , DBFFIELD_TYPE_CHAR, 10, 0),
+                array("NAME" , DBFFIELD_TYPE_CHAR, 40, 0),
+                array("ADD1" , DBFFIELD_TYPE_CHAR, 40, 0),
+                array("ADD2" , DBFFIELD_TYPE_CHAR, 40, 0),
+                array("ADD3" , DBFFIELD_TYPE_CHAR, 40, 0),
+                array("ADD4" , DBFFIELD_TYPE_CHAR, 40, 0),
+                array("ADD5" , DBFFIELD_TYPE_CHAR, 40, 0),
+                array("CONT" , DBFFIELD_TYPE_CHAR, 40, 0),
+                array("TEL1" , DBFFIELD_TYPE_CHAR, 20, 0),
+                array("TEL2" , DBFFIELD_TYPE_CHAR, 20, 0),
+                array("FAXI" , DBFFIELD_TYPE_CHAR, 20, 0),
+                array("TELX" , DBFFIELD_TYPE_CHAR, 40, 0),
+                array("TERM" , DBFFIELD_TYPE_NUMERIC, 3, 0),
+                array("LIMI" , DBFFIELD_TYPE_NUMERIC, 10, 2),
+                array("CURR" , DBFFIELD_TYPE_CHAR, 3, 0),
+                array("SMAN" , DBFFIELD_TYPE_CHAR, 5, 0),
+                array("UEN" , DBFFIELD_TYPE_CHAR, 16, 0),
+                array("GSTNO" , DBFFIELD_TYPE_CHAR, 16, 0),
+                array("CTY" , DBFFIELD_TYPE_CHAR, 3, 0),
             );
              
             /* create a new table */
-            $tableNew = XBaseWritableTable::create("data.dbf",$fields);
-             
+            $tableNew = XBaseWritableTable::create("CUSTOMER.dbf",$fields);
+            
+            $insert_dbf = $this->getInsertCustomerDbf();
+
+            $cnt = count($insert_dbf);
+                       
             /* insert some data */
-            $r = $tableNew->appendRecord();
-            $r->setObjectByName("bool",true);
-            $r->setObjectByName("date",time());
-            $r->setObjectByName("number",123);
-            $r->setObjectByName("string","String one");
-            $tableNew->writeRecord();
+            for ($i=0; $i < $cnt ; $i++) { 
+                $r = $tableNew->appendRecord();
 
-            $r =& $tableNew->appendRecord();
-            $r->setObjectByName("bool",false);
-            $r->setObjectByName("date",time()/2);
-            $r->setObjectByName("number",321);
-            $r->setObjectByName("string","String two");
-            $tableNew->writeRecord();
+                $r->setObjectByName("IDEN",$insert_dbf[$i]->customer_code);
+                $r->setObjectByName("NAME",$insert_dbf[$i]->customer_name);
+                $r->setObjectByName("ADD1",$insert_dbf[$i]->customer_bldg_number);
+                $r->setObjectByName("ADD2",$insert_dbf[$i]->customer_street_name);
+                $r->setObjectByName("ADD3",$insert_dbf[$i]->customer_postal_code);
+                $r->setObjectByName("CONT",$insert_dbf[$i]->customer_contact_person);
+                $r->setObjectByName("TEL1",$insert_dbf[$i]->customer_phone);
+                $r->setObjectByName("FAXI",$insert_dbf[$i]->customer_fax);
+                $r->setObjectByName("TELX",$insert_dbf[$i]->customer_email);
+                $r->setObjectByName("TERM",$insert_dbf[$i]->customer_credit_term_days);
+                $r->setObjectByName("LIMI",$insert_dbf[$i]->customer_credit_limit);
+                $r->setObjectByName("CURR",$insert_dbf[$i]->currency_id);
+                $r->setObjectByName("UEN",$insert_dbf[$i]->customer_uen_no);
+                $r->setObjectByName("GSTNO",$insert_dbf[$i]->customer_gst_number);
+                $r->setObjectByName("CTY",$insert_dbf[$i]->country_id);
 
-            $r =& $tableNew->appendRecord();
-            $r->setObjectByName("bool",false);
-            $r->setObjectByName("date",time()/2);
-            $r->setObjectByName("number",456);
-            $r->setObjectByName("string","String three");
-            $tableNew->writeRecord();
+                $tableNew->writeRecord();    
+            }
              
-            $file = 'data.dbf';
-            // var_dump($tableNew);exit;
+            $file = 'CUSTOMER.dbf';
             $this->DownloadFile($file);
 
-            //redirect('master_files/customer_master','refresh');
+        }
+        public function export_receipt_master()
+        {
+            require_once "util_github/Column.class.php";
+            require_once "util_github/Record.class.php";
+            require_once "util_github/Table.class.php";
+            require_once "util_github/WritableTable.class.php";
+                        
+            /* sample data */  
+            $fields = array(
+                array("ENTR" , DBFFIELD_TYPE_CHAR, 5, 0),
+                array("ACCN" , DBFFIELD_TYPE_CHAR, 5, 0),
+                array("DREF" , DBFFIELD_TYPE_CHAR, 12, 0),
+                array("DATE" , DBFFIELD_TYPE_DATE, 10, 0),
+                array("IDEN" , DBFFIELD_TYPE_CHAR, 10, 0),
+                array("CURR" , DBFFIELD_TYPE_CHAR, 3, 0),
+                array("RATE" , DBFFIELD_TYPE_NUMERIC, 9, 4),
+                array("FAMT" , DBFFIELD_TYPE_NUMERIC, 13, 2),
+                array("AMOU" , DBFFIELD_TYPE_NUMERIC, 13, 2),
+                array("REMA" , DBFFIELD_TYPE_CHAR, 80, 0),
+            );
+             
+            /* create a new table */
+            $tableNew = XBaseWritableTable::create("FAST_R.dbf",$fields);
+            
+            $insert_dbf = $this->getInsertReceiptDbf();
+
+            //var_dump($insert_dbf);exit;
+
+            $cnt = count($insert_dbf);
+                       
+            /* insert some data */
+            for ($i=0; $i < $cnt ; $i++) { 
+                $r = $tableNew->appendRecord();
+                
+                if ($insert_dbf[$i]->bank == '') {
+                    $r->setObjectByName("ENTR",'CA101');    
+                }
+                else 
+                {
+                    $r->setObjectByName("ENTR",$insert_dbf[$i]->bank);    
+                }
+                $r->setObjectByName("ACCN",'CA101');
+                $r->setObjectByName("DREF",$insert_dbf[$i]->receipt_ref_no);
+                $r->setObjectByName("DATE",$insert_dbf[$i]->created_on);
+                $r->setObjectByName("IDEN",$insert_dbf[$i]->customer_code);
+                $r->setObjectByName("CURR",$insert_dbf[$i]->currency);
+                $r->setObjectByName("RATE",$insert_dbf[$i]->currency_rate);
+                $r->setObjectByName("FAMT",$insert_dbf[$i]->amount);
+                $r->setObjectByName("AMOU",$insert_dbf[$i]->amount/$insert_dbf[$i]->currency_rate);
+                $r->setObjectByName("REMA","remark");
+
+                $tableNew->writeRecord();    
+            }
+             
+            $file = 'FAST_R.dbf';
+            $this->DownloadFile($file);
         }
 		
 		public function import_customer_master($action="form")

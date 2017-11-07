@@ -67,7 +67,7 @@
                   <hr>
                   <div class="row">
                     <div class="col-xs-12 col-md-4 product_id_div">
-                      <select name="invoice_reference_id[]" id="invoice_reference_id" title="Select Invoice reference" class="form-control select2" multiple="multiple">
+                      <select name="invoice_reference_id" id="invoice_reference_id" title="Select Invoice reference" class="form-control select2" multiple="multiple">
                           <?php echo $invoice_reference; ?>
                         </select>
                     </div>

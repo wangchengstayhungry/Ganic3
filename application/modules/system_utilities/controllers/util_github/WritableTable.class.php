@@ -125,7 +125,7 @@ class XBaseWritableTable extends XBaseTable {
 		$data = $this->record->serializeRawData();
 		fwrite($this->fp,$data);
 		if ($this->record->inserted) $this->writeHeader();
-		ob_flush($this->fp);		
+		//flush($this->fp);		
 		//ob_flush();
 		//ob_end_flush();
 	}

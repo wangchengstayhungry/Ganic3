@@ -1,8 +1,16 @@
 <section class="content-header">
-  <h1>
-    <?php echo ucwords($this->uri->segment(3)); ?> Receipt List
-    <!-- <small>Preview of UI elements</small> -->
-  </h1>
+  <div class="row">
+    <div class="col-md-3">
+      <h2>
+        <?php echo ucwords($this->uri->segment(3)); ?> Receipt List
+        <!-- <small>Preview of UI elements</small> --> 
+      </h2>
+    </div>
+    <div class="col-md-9" style="margin-top: 20px;">
+      <a href='<?php echo base_url('system_utilities/export_receipt_master')?>'><h4 style="color: red;">EXPORT TO DBF</h4></a>
+    </div>
+  </div>
+  
   <?php 
     $list = array('active'=>ucwords($this->uri->segment(3)).' Receipt List ');
     echo breadcrumb($list); 
