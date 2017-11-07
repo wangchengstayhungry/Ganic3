@@ -60,9 +60,9 @@
 		}
 
         function DownloadFile($file) { // $file = include path
-            if(file_exists($file)) {
+            if(file_exists($file)) {                
                 header('Content-Description: File Transfer');
-                header('Content-Type: application/octet-stream');
+                //header('Content-Type: application/octet-stream');
                 header('Content-Disposition: attachment; filename='.basename($file));
                 header('Content-Transfer-Encoding: binary');
                 header('Expires: 0');
@@ -107,15 +107,27 @@
             $r->setObjectByName("date",time());
             $r->setObjectByName("number",123);
             $r->setObjectByName("string","String one");
-            //$tableNew->writeRecord();
+            $tableNew->writeRecord();
+
+            $r =& $tableNew->appendRecord();
+            $r->setObjectByName("bool",false);
+            $r->setObjectByName("date",time()/2);
+            $r->setObjectByName("number",321);
+            $r->setObjectByName("string","String two");
+            $tableNew->writeRecord();
+
+            $r =& $tableNew->appendRecord();
+            $r->setObjectByName("bool",false);
+            $r->setObjectByName("date",time()/2);
+            $r->setObjectByName("number",456);
+            $r->setObjectByName("string","String three");
+            $tableNew->writeRecord();
              
             $file = 'data.dbf';
-            $download_file = 'name.dbf';
-
-            // set the download rate limit (=> 20,5 kb/s)
-            $download_rate = 20.5;
-            $attachment_location = $_SERVER["DOCUMENT_ROOT"] . "/data.dbf";
+            // var_dump($tableNew);exit;
             $this->DownloadFile($file);
+
+            //redirect('master_files/customer_master','refresh');
         }
 		
 		public function import_customer_master($action="form")

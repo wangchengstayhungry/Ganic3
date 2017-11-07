@@ -298,3 +298,5 @@ class XBaseRecord {
 	     return ($this->deleted?"*":" ").implode("",$this->choppedData);
      }
 }
+
+?>

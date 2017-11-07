@@ -104,3 +104,5 @@ class XBaseColumn {
         return $this->colIndex;
     }
 }
+
+?>

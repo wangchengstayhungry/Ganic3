@@ -115,7 +115,7 @@ class XBaseWritableTable extends XBaseTable {
         }
         $this->writeChar(0x0d);
 	}
-	function appendRecord() {
+	function &appendRecord() {
 		$this->record = new XBaseRecord($this,$this->recordCount);
 		$this->recordCount+=1;
 		return $this->record;
@@ -125,7 +125,9 @@ class XBaseWritableTable extends XBaseTable {
 		$data = $this->record->serializeRawData();
 		fwrite($this->fp,$data);
 		if ($this->record->inserted) $this->writeHeader();
-		flush($this->fp);
+		ob_flush($this->fp);		
+		//ob_flush();
+		//ob_end_flush();
 	}
 	function deleteRecord() {
 		$this->record->deleted=true;
@@ -192,3 +194,5 @@ class XBaseWritableTable extends XBaseTable {
 	    return $this->writeShort($t["year"]) + $this->writeChar($t["mon"]) + $this->writeChar($t["mday"]);
     }
 }
+
+?>
