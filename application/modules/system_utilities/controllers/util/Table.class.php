@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * ----------------------------------------------------------------
 *			XBase
@@ -105,7 +105,7 @@ class XBaseTable {
         $this->columns = array();
         $bytepos = 1;
         for ($i=0;$i<$fieldCount;$i++) {
-            $column =& new XBaseColumn(
+            $column = new XBaseColumn(
                 $this->readString(11),	// name
                 $this->readByte(),		// type
                 $this->readInt(),		// memAddress

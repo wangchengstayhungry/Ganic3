@@ -1,6 +1,7 @@
 <?php
 
 	defined('BASEPATH') OR exit('No direct script access allowed');
+
    		
 	class System_utilities extends MY_Controller {
 
@@ -58,20 +59,37 @@
 			}
 		}
 
+        function DownloadFile($file) { // $file = include path
+            if(file_exists($file)) {
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename='.basename($file));
+                header('Content-Transfer-Encoding: binary');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($file));
+                ob_clean();
+                flush();
+                readfile($file);
+                exit;
+            }
+        }
+
         public function export_customer_master()
         {
+
             require_once "util_github/Column.class.php";
             require_once "util_github/Record.class.php";
             require_once "util_github/Table.class.php";
             require_once "util_github/WritableTable.class.php";
-
-            // $fields = array(
-            //     array("bool" , DBFFIELD_TYPE_LOGICAL),
-            //     array("memo" , DBFFIELD_TYPE_MEMO),
-            //     array("date" , DBFFIELD_TYPE_DATE),
-            //     array("number" , DBFFIELD_TYPE_NUMERIC, 3, 0),
-            //     array("string" , DBFFIELD_TYPE_CHAR, 50),
-            // );
+           // require_once "util_github/download.php";
+            // require_once "Column.class.php";
+            // require_once "Record.class.php";
+            // require_once "Table.class.php";
+            // require_once "WritableTable.class.php";
+             
+            /* sample data */  
             $fields = array(
                 array("bool" , DBFFIELD_TYPE_LOGICAL),
                 array("memo" , DBFFIELD_TYPE_MEMO),
@@ -79,36 +97,25 @@
                 array("number" , DBFFIELD_TYPE_NUMERIC, 3, 0),
                 array("string" , DBFFIELD_TYPE_CHAR, 50),
             );
-            //$table = new Test("sdfsdf");
-            // /* create a new table */
-            
+             
+            /* create a new table */
             $tableNew = XBaseWritableTable::create("data.dbf",$fields);
-            $r =& $tableNew->appendRecord();
-            
+             
+            /* insert some data */
+            $r = $tableNew->appendRecord();
             $r->setObjectByName("bool",true);
             $r->setObjectByName("date",time());
             $r->setObjectByName("number",123);
             $r->setObjectByName("string","String one");
+            //$tableNew->writeRecord();
+             
+            $file = 'data.dbf';
+            $download_file = 'name.dbf';
 
-            $tableNew->writeRecord();
-
-            //var_dump($tableNew);exit;
-            $file = "data.dbf";
-            if (file_exists($file)) {
-
-
-                header('Content-Description: File Transfer');
-                header('Content-Type: application/octet-stream');
-                header('Content-Disposition: attachment; filename="'.basename($file).'"');
-                header('Expires: 0');
-                header('Cache-Control: must-revalidate');
-                header('Pragma: public');
-                header('Content-Length: ' . filesize($file));
-                readfile($file);
-                exit;
-            }
-            //var_dump($tableNew);exit;
-           // redirect('master_files/customer_master','refresh');
+            // set the download rate limit (=> 20,5 kb/s)
+            $download_rate = 20.5;
+            $attachment_location = $_SERVER["DOCUMENT_ROOT"] . "/data.dbf";
+            $this->DownloadFile($file);
         }
 		
 		public function import_customer_master($action="form")

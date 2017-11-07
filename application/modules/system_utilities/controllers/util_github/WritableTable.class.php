@@ -14,7 +14,7 @@
 *  Info? Mail to info@cyane.nl
 * 
 * --------------------------------------------------------------
-*
+* 
 * This class extends the main entry to a DBF table file, with writing abilities
 *
 **/
@@ -115,7 +115,7 @@ class XBaseWritableTable extends XBaseTable {
         }
         $this->writeChar(0x0d);
 	}
-	function &appendRecord() {
+	function appendRecord() {
 		$this->record = new XBaseRecord($this,$this->recordCount);
 		$this->recordCount+=1;
 		return $this->record;
