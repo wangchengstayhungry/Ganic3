@@ -81,18 +81,22 @@
             );
             //$table = new Test("sdfsdf");
             // /* create a new table */
+            
             $tableNew = XBaseWritableTable::create("data.dbf",$fields);
             $r =& $tableNew->appendRecord();
+            
             $r->setObjectByName("bool",true);
             $r->setObjectByName("date",time());
             $r->setObjectByName("number",123);
             $r->setObjectByName("string","String one");
+
             $tableNew->writeRecord();
 
             //var_dump($tableNew);exit;
             $file = "data.dbf";
             if (file_exists($file)) {
-                
+
+
                 header('Content-Description: File Transfer');
                 header('Content-Type: application/octet-stream');
                 header('Content-Disposition: attachment; filename="'.basename($file).'"');
