@@ -86,7 +86,7 @@
 			is_logged_in('admin');
 			has_permission();
 			$post=$this->input->post();
-			$post['invoice_reference_id'] = json_encode($post['invoice_reference_id']);
+			//$post['invoice_reference_id'] = json_encode($post['invoice_reference_id']);
 			if (isset($post['ex_ref_no'])) {
 				unset($post['ex_ref_no']);
 			}

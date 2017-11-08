@@ -10,7 +10,11 @@ class System_utilities_model extends CI_Model {
     public function get_customer_master()
     { 
 		return $result=$this->custom->getRows("customer_master");
-		
+    }
+
+    public function get_company_profile()
+    {
+        return $result=$this->custom->getRows("company_profile");
     }
 
     private function _get_datatables_query($table,$column_order,$join_table,$join_condition,$where,$table_id)

@@ -410,12 +410,12 @@ class Datatable extends CI_Controller {
 					$row[] = $person->billing_description;
 					$row[] = $person->gst_code;
 					$row[] = $person->currency_name;
-					$row[] = number_format(($person->price * $person->quantity - $person->price * $person->quantity * $person->discount / 100)* $person->currency_amount , 0, '', '');
-					$row[] = number_format($person->price * $person->quantity * $person->gst_rate * $person->currency_amount / 100, 0, '', '');
+					$row[] = number_format((($person->price * $person->quantity - $person->price * $person->quantity * $person->discount / 100)* $person->currency_rate) , 2, '.', '');
+					$row[] = number_format($person->price * $person->quantity * $person->gst_rate * $person->currency_rate / 100 * (1 - $person->discount / 100), 2, '.', '');
 					$row[] = $person->currency_amount;
 					
-					$row[] = number_format(($person->price * $person->quantity - $person->price * $person->quantity * $person->discount / 100) , 0, '', '');
-					$row[] = number_format($person->price * $person->quantity * $person->gst_rate / 100, 0, '', '');
+					$row[] = number_format(($person->price * $person->quantity - $person->price * $person->quantity * $person->discount / 100) , 2, '.', '');
+					$row[] = number_format($person->price * $person->quantity * $person->gst_rate / 100 * (1 - $person->discount / 100), 2, '.', '');
 					// $row[] = $person->table_id;
 					// $row[] = $person->created_on;
 					// $row[] = $person->doc_ref_no;
