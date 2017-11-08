@@ -67,7 +67,7 @@
                       <tbody>
                         <tr>
                           <td>
-                            <input type="text" class="transaction_date form-control" name="data[transaction_date][0]" value="<?php echo date('Y-m-d');?>">
+                            <input type="date" class="transaction_date form-control" name="data[transaction_date][0]" value="<?php echo date('Y-m-d');?>">
                           </td>
                           <td>
                             <input type="text" class="doc_reference form-control" name="data[doc_reference][0]">
@@ -76,7 +76,7 @@
                             <input type="text" class="remarks form-control" name="data[remarks][0]">
                           </td>
                           <td>
-                            <input type="text" class="amount form-control" name="data[amount][0]">
+                            <input type="number" class="amount form-control" name="data[amount][0]">
                           </td>
                           <td class="hidden">
                             <input type="text" readonly class="sign form-control" name="data[sign][0]" value="+">

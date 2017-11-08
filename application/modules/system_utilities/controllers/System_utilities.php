@@ -299,6 +299,8 @@
                 $r->setObjectByName("ACCN",'CA001');
                 $r->setObjectByName("DREF",$insert_dbf[$i]->invoice_ref_no);
                 $r->setObjectByName("DATE",$insert_dbf[$i]->created_on);
+                // echo $insert_dbf[$i]->created_on;
+                // exit;
                 $r->setObjectByName("IDEN",$insert_dbf[$i]->customer_code);
                 $r->setObjectByName("CURR",$insert_dbf[$i]->currency_name);
                 $r->setObjectByName("RATE",$insert_dbf[$i]->currency_rate);

@@ -87,3 +87,11 @@ hr {
 .display-none {
 	display: none;
 }
+/*Date picker kill part*/
+input::-webkit-calendar-picker-indicator{
+    display: none;
+}
+
+input[type="date"]::-webkit-input-placeholder{ 
+    visibility: hidden !important;
+}

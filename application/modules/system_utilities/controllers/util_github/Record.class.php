@@ -229,7 +229,8 @@ class XBaseRecord {
 	        $this->forceSetString($columnObj,"");
 	        return;
         }
-       	$this->forceSetString($columnObj,date("Ymd",$value));
+        
+       	$this->forceSetString($columnObj,date("Ymd",strtotime(str_replace("-","/",$value))));
     }
     function setDateTime($columnObj,$value) {
         if ($columnObj->getType()!=DBFFIELD_TYPE_DATETIME) trigger_error ($columnObj->getName()." is not a DateTime column", E_USER_ERROR);
