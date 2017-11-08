@@ -285,7 +285,8 @@
             
             $insert_dbf = $this->getInsertInvoiceDbf();
 
-            //$companygstreg = $this->getCompanyGstReg();
+            $companygstreg = $this->getCompanyGstReg()[0]->gst_reg_no;
+            //var_dump($companygstreg);exit;
             //var_dump($insert_dbf);exit;
 
             $cnt = count($insert_dbf);
@@ -301,16 +302,22 @@
                 $r->setObjectByName("IDEN",$insert_dbf[$i]->customer_code);
                 $r->setObjectByName("CURR",$insert_dbf[$i]->currency_name);
                 $r->setObjectByName("RATE",$insert_dbf[$i]->currency_rate);
-                $r->setObjectByName("FAMT",$insert_dbf[$i]->final_total);
-                $r->setObjectByName("AMOU",$insert_dbf[$i]->final_total/$insert_dbf[$i]->currency_rate);
-                $r->setObjectByName("DOCUAMOU",$insert_dbf[$i]->lump_sum_discount_price);
+                $r->setObjectByName("FAMT",$insert_dbf[$i]->product_total + $insert_dbf[$i]->product_total * $insert_dbf[$i]->gst_rate / 100);
+                $r->setObjectByName("AMOU",$insert_dbf[$i]->product_total + $insert_dbf[$i]->product_total * $insert_dbf[$i]->gst_rate / 100/$insert_dbf[$i]->currency_rate);
+                $r->setObjectByName("DOCUAMOU",$insert_dbf[$i]->product_total);
                 $r->setObjectByName("SMAN",$insert_dbf[$i]->s_code);
-                // $r->setObjectByName("DONE",$insert_dbf[$i]->docuamou);
-                // if ($insert_dbf[$i]->flag == 'True') {
-                //     $r->setObjectByName("GSTCATE",$insert_dbf[$i]->gstcate);
-                //     $r->setObjectByName("GSTPERC",$insert_dbf[$i]->gstperc);
-                //     $r->setObjectByName("GSTAMOU",$insert_dbf[$i]->gstamou);
-                // }
+                
+                if (isset($companygstreg)) {
+
+                    $r->setObjectByName("DONE",'T');    
+                    $r->setObjectByName("GSTCATE",$insert_dbf[$i]->gst_code);
+                    $r->setObjectByName("GSTPERC",$insert_dbf[$i]->gst_rate);
+                    $r->setObjectByName("GSTAMOU",($insert_dbf[$i]->product_total + $insert_dbf[$i]->product_total * $insert_dbf[$i]->gst_rate / 100/$insert_dbf[$i]->currency_rate) * $insert_dbf[$i]->gst_rate / 100);
+                }
+                else
+                {
+                    $r->setObjectByName("DONE",'F');    
+                }
                 $tableNew->writeRecord();    
             }
              
