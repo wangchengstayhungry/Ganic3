@@ -17,7 +17,7 @@
 			/*==========================================*/
 			// $receipt_where=array('user_id'=>$this->session->user_id);
 			/*=========================================*/
-			$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code'),"Customer",array('(',')'));
+			$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code','currency_id'),"Customer",array('(',')',' '));
 			/*==========================================*/
 			
 			/*==========================================*/
@@ -33,7 +33,7 @@
 			$this->body_vars['open_edit_data']=$open_edit_data=$this->custom->getSingleRow('open_table',array("open_id"=>$row_id)); 
 			if($open_edit_data):
 				
-				$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code'),"Customer",array('(',')'),array(),array($open_edit_data->customer_id));
+				$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code','currency_id'),"Customer",array('(',')',' '),array(),array($open_edit_data->customer_id));
 				
 				if($mode=="edit"):
 					$this->body_vars['save_url']=base_url('account/create_opentable/edit');
@@ -199,7 +199,7 @@
  			is_logged_in('admin');
  			has_permission();
  			
-			$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code'),"Customer",array('(',')'));
+			$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code','currency_id'),"Customer",array('(',')',' '));
 			$this->body_vars['save_url']=base_url('account/create_opentable');
  			$this->body_file="account/opening_balance.php";
 
@@ -295,7 +295,7 @@
 			/*==========================================*/
 			// $receipt_where=array('user_id'=>$this->session->user_id);
 			/*=========================================*/
-			$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code'),"Customer",array('(',')'));
+			$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code','currency_id'),"Customer",array('(',')',' '));
 			/*==========================================*/
 			
 			/*==========================================*/
@@ -312,7 +312,7 @@
 			/*==========================================*/
 			// $receipt_where=array('user_id'=>$this->session->user_id);
 			/*=========================================*/
-			$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code'),"Customer",array('(',')'));
+			$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code', 'currency_id'),"Customer",array('(',')',' '));
 			
 			$this->body_vars['save_url']=base_url('account/offsetRecords');
 

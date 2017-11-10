@@ -284,17 +284,47 @@ class Custom_model extends CI_Model
                         if (in_array($row->$id,$selected)) {
                                 $drop_options .= "<option value='" . $row->$id . "' selected='selected'>";
                                 for ($i=1; $i <=count($columns) ; $i++) { 
-                                    $col_value=$columns[$i];
-                                    $col_sep=$separator[$i-1];
-                                    $drop_options .="".$row->$col_value . " $col_sep";
+
+                                    if ($i == 3) {
+                                       
+                                        $customer_result = $this->getRows('customer_master',array("customer_id" => $selected[0]));
+                                        $currency_id=$customer_result[0]->currency_id;    
+                                      
+                                        $currency_result = $this->getRows('currency_master',array("currency_id" => $currency_id));
+                                     
+                                        $col_value=$currency_result[0]->currency_name;
+                                        $col_sep=$separator[$i-1];
+                                        
+                                        $drop_options .="".$col_value . " $col_sep";
+                                    }
+                                    else
+                                    {
+                                        $col_value=$columns[$i];
+                                        $col_sep=$separator[$i-1];
+                                        $drop_options .="".$row->$col_value . " $col_sep";
+                                    }
+
+                                    
                                 }
                                  $drop_options.="</option>";
                         } else {
                                 $drop_options .= "<option value='" . $row->$id . "' >";
                                 for ($i=1; $i <=count($columns) ; $i++) { 
-                                    $col_value=$columns[$i];
-                                    $col_sep=$separator[$i-1];
-                                    $drop_options .="".$row->$col_value . " $col_sep";
+                                    if ($i == 3) {
+                                        $currency_id=$columns[$i];    
+                                        $currency_result = $this->getRows('currency_master',array("currency_id" => $row->$currency_id));
+         
+                                        $col_value=$currency_result[0]->currency_name;
+                                        $col_sep=$separator[$i-1];
+                                        
+                                        $drop_options .="".$col_value . " $col_sep";
+                                    }
+                                    else
+                                    {
+                                        $col_value=$columns[$i];
+                                        $col_sep=$separator[$i-1];
+                                        $drop_options .="".$row->$col_value . " $col_sep";
+                                    }
                                 }
                                  $drop_options.="</option>";
                         }
@@ -305,9 +335,25 @@ class Custom_model extends CI_Model
                 foreach ($rows as $row) {
                         $drop_options .= "<option value='" . $row->$id . "'>";
                         for ($i=1; $i <=count($columns) ; $i++) { 
-                            $col_value=$columns[$i];
-                            $col_sep=$separator[$i-1];
-                            $drop_options .="".$row->$col_value . " $col_sep";
+                            if ($i == 3) {
+                                $currency_id=$columns[$i];    
+                                $currency_result = $this->getRows('currency_master',array("currency_id" => $row->$currency_id));
+                                //var_dump($currency_result[0]->currency_name); exit;
+                                //$col_value = $currency_result[0]->currency_name;
+
+                                $col_value=$currency_result[0]->currency_name;
+                                $col_sep=$separator[$i-1];
+
+                                $drop_options .="".$col_value . " $col_sep";
+                            }
+                            else
+                            {
+                                $col_value=$columns[$i];
+                                $col_sep=$separator[$i-1];
+                                $drop_options .="".$row->$col_value . " $col_sep";
+                            }
+
+                            
                         }
                          $drop_options.="</option>";
                 }

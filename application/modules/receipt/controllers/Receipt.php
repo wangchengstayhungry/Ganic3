@@ -22,7 +22,7 @@
 				redirect('receipt/receipt_setting');
 			}
 			/*==========================================*/
-			$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code'),"Customer",array('(',')'));
+			$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code','currency_id'),"Customer",array('(',')',' '));
 			/*==========================================*/
 			$this->body_vars['invoice_reference']=$this->custom->createDropdownSelect("invoice_master",array('invoice_id','invoice_ref_no'),"Invoice Ref No",array(''),array('customer_id' => ''));
 			
@@ -143,7 +143,7 @@
 				$company_where=array('profile_id'=>1);
 				$this->body_vars['company_details']=$company_details=$this->custom->getSingleRow('company_profile',$company_where);
 				/*==========================================*/
-				$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code'),"Customer",array('(',')'),array(),array($receipt_edit_data->customer_id));
+				$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code','currency_id'),"Customer",array('(',')',' '),array(),array($receipt_edit_data->customer_id));
 				/*==========================================*/
 				$this->body_vars['invoice_reference']=$this->custom->createDropdownSelect("invoice_master",array('invoice_id','invoice_ref_no'),"Invoice Ref No",array(''),array('customer_id' => ''));
 				/*==========================================*/

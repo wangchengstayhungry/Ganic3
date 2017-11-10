@@ -59,7 +59,7 @@
 				redirect('quotation/quotation_setting');
 			}
 			/*==========================================*/
-			$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code'),"Customer",array('(',')'));
+			$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code','currency_id'),"Customer",array('(',')',' '));
 			/*==========================================*/
 			$this->body_vars['salesman_options']=$this->custom->createDropdownSelect("salesman_master",array('s_id','s_name','s_code'),"Sales Person",array('(',')'));
 			/*==========================================*/
@@ -195,7 +195,7 @@
 				$company_where=array('profile_id'=>1);
 				$this->body_vars['company_details']=$company_details=$this->custom->getSingleRow('company_profile',$company_where);
 				/*==========================================*/
-				$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code'),"Customer",array('(',')'),array(),array($quotation_edit_data->customer_id));
+				$this->body_vars['customer_options']=$this->custom->createDropdownSelect("customer_master",array('customer_id','customer_name','customer_code','currency_id'),"Customer",array('(',')',' '),array(),array($quotation_edit_data->customer_id));
 				/*==========================================*/
 				$this->body_vars['salesman_options']=$this->custom->createDropdownSelect("salesman_master",array('s_id','s_name'),"Sales Person",array(' '),array(),array($quotation_edit_data->salesman_id));
 				/*==========================================*/
