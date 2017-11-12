@@ -374,6 +374,150 @@
             <?php endif; ?>      
                </ul>
             </li>
+
+            <li class="treeview">
+               <a href="#">
+               <i class="fa fa-list"></i>
+               <i class="fa fa-angle-left pull-right"></i>
+               <span class="font-bold">Quotation</span>
+               </a>
+               <ul class="treeview-menu">
+                  <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->quotation_setting): ?>
+                     <li>
+                        <a href="<?php echo base_url(); ?>quotation/quotation_setting" class="auto">
+                        <i class="fa fa-paperclip"></i>
+                        <span class="font-bold">Quotation Setting</span>
+                        </a>
+                     </li>
+                     <?php endif; ?>
+                     <!-- System utilities code close -->
+            <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->quotation): ?>
+            <li>
+               <a href="<?php echo base_url(); ?>quotation" class="auto">
+               <i class="fa fa-file-o"></i>
+               <span class="font-bold">New Quotation</span>
+               </a>
+            </li>
+            <?php endif; ?>
+            <!-- <li>
+               <a href="<php echo base_url();?>admin/quotationlist" class="auto">
+                   <span class="pull-right text-muted">
+               <i class="i i-circle-sm-o text"></i>
+               <i class="i i-circle-sm text-active"></i>
+               </span>
+                   <i class="i i-docs icon">
+               </i>
+                   <span class="font-bold">Quotationlist</span>
+               </a>
+               </li> -->
+     <!--       <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->pending_quotation || $permissions->confirm_quotation || $permissions->rejected_quotation): ?>
+            <li class="treeview">
+               <a href="#">
+               <i class="fa fa-list"></i>
+               <i class="fa fa-angle-left pull-right"></i>
+               <span class="font-bold">Quotation listing</span>
+               </a>
+               <ul class="treeview-menu">
+                  <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->pending_quotation): ?>
+                  <li>
+                     <a href="<?php echo base_url(); ?>quotation/quotationlist/pending" class="auto">
+                     <i class="fa fa-arrow-right"></i>
+                     <span>Pending Quotation</span>
+                     </a>
+                  </li>
+                  <?php endif; ?>
+                  <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->confirm_quotation): ?>
+                  <li>
+                     <a href="<?php echo base_url(); ?>quotation/quotationlist/confirm" class="auto">
+                     <i class="fa fa-arrow-right"></i>
+                     <span>Confirm Quotation</span>
+                     </a>
+                  </li>
+                  <?php endif; ?>
+                  <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->rejected_quotation): ?>
+                  <li>
+                     <a href="<?php echo base_url(); ?>quotation/quotationlist/rejected" class="auto">
+                     <i class="fa fa-arrow-right"></i>
+                     <span>Rejected Quotation</span>
+                     </a>
+                  </li>
+                  <?php endif; ?> -->
+                  
+                        <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->pending_quotation  || $permissions->confirm_quotation || $permissions->rejected_quotation|| $permissions->successful_quotation|| $permissions->deleted_quotation): ?>
+            <li class="treeview">
+               <a href="#">
+               <i class="fa fa-list"></i>
+               <i class="fa fa-angle-left pull-right"></i>
+               <span class="font-bold">Quotation listing</span>
+               </a>
+               <ul class="treeview-menu">
+                <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->confirm_quotation): ?>
+                  <li>
+                     <a href="<?php echo base_url(); ?>quotation/quotationlist/confirm" class="auto">
+                     <i class="fa fa-arrow-right"></i>
+                     <span>Confirmed Quotation</span>
+                     </a>
+                  </li>
+                  <?php endif; ?>
+                   <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->rejected_quotation): ?>
+                  <li>
+                     <a href="<?php echo base_url(); ?>quotation/quotationlist/rejected" class="auto">
+                     <i class="fa fa-arrow-right"></i>
+                     <span>Rejected Quotation</span>
+                     </a>
+                  </li>
+                  <?php endif; ?>
+                  
+                   <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->successful_quotation): ?>
+                  <li>
+                     <a href="<?php echo base_url(); ?>quotation/quotationlist/successful" class="auto">
+                     <i class="fa fa-arrow-right"></i>
+                     <span>Successful Quotation</span>
+                     </a>
+                  </li>
+                  <?php endif; ?>
+                  
+                   <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->deleted_quotation): ?>
+                  <li>
+                     <a href="<?php echo base_url(); ?>quotation/quotationlist/deleted" class="auto">
+                     <i class="fa fa-arrow-right"></i>
+                     <span>Deleted Quotation</span>
+                     </a>
+                  </li>
+                  <?php endif; ?>
+                  
+                <!--  <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->pending_quotation): ?>
+                  <li>
+                     <a href="<?php echo base_url(); ?>quotation/quotationlist/pending" class="auto">
+                     <i class="fa fa-arrow-right"></i>
+                     <span>Pending Quotation</span>
+                     </a>
+                  </li>
+                  <?php endif; ?>
+                  <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->confirm_quotation): ?>
+                  <li>
+                     <a href="<?php echo base_url(); ?>quotation/quotationlist/confirm" class="auto">
+                     <i class="fa fa-arrow-right"></i>
+                     <span>Confirm Quotation</span>
+                     </a>
+                  </li>
+                  <?php endif; ?> -->
+                 
+               </ul>
+            </li>
+            <?php endif; ?>      
+            
+                  <?php if(($this->ion_auth->is_admin() && $this->session->group_id==1 || $this->session->level=="admin") || $permissions->quotation_setting): ?>
+                     <li>
+                        <a href="<?php echo base_url(); ?>quotation/zap_Quotation_data" class="auto">
+                        <i class="fa fa-bolt"></i>
+                        <span class="font-bold">ZAP Quotation</span>
+                        </a>
+                     </li>
+                     <?php endif; ?>
+               </ul>
+            </li>
+            <?php endif; ?> 
             
             <li class="treeview">
                <a href="#">

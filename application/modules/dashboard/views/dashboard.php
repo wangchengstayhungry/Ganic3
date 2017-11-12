@@ -445,6 +445,44 @@
                         </div>
           </div>
     </div>
+
+    <div class="col-md-3 col-sm-12 col-xs-12">
+      <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3>Other listing</h3>
+              <p>&nbsp;</p>
+            </div>
+            <div class="icon">
+              
+            </div>
+            <a href="JavaScript:void(0);" id="other_listing" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                     <!-- <ul class="treeview-menu new_invoice_menu listing_menu" style="display: none"> -->
+                        <div class="other_listing_menu listing_menu" style="display: none">
+                           <a href="<?php echo base_url();?>invoice/otherlist/ar" class="auto">
+                           <i class="fa fa-arrow-right"></i>
+                           <span>AR listing</span>
+                           </a>
+                        </div>
+                        <div class="other_listing_menu listing_menu" style="display: none">
+                           <a href="<?php echo base_url(); ?>invoice/otherlist/gl" class="auto">
+                           <i class="fa fa-arrow-right"></i>
+                           <span>GL listing</span>
+                           </a>
+                        </div>
+                        <div class="other_listing_menu listing_menu" style="display: none">
+                           <a href="<?php echo base_url(); ?>invoice/otherlist/gst" class="auto">
+                           <i class="fa fa-arrow-right"></i>
+                           <span>GST listing</span>
+                           </a>
+                        </div>
+                        <div class="other_listing_menu listing_menu" style="display: none">
+                           <a href="<?php echo base_url(); ?>invoice/otherlist/stock" class="auto">
+                           <i class="fa fa-arrow-right"></i>
+                           <span>Stock listing</span>
+                           </a>
+                        </div>
+          </div>
+    </div>
     
     <div class="col-md-3 col-sm-12 col-xs-12">
       <div class="small-box bg-yellow">
@@ -695,7 +733,7 @@ function topScroll(){
           }, 1000);
 }
 
-   $('#new_invoice,#quotation_listing, #invoice_listing, #receipt_listing').click(function(){
+   $('#new_invoice,#quotation_listing, #invoice_listing, #other_listing, #receipt_listing').click(function(){
     id=$(this).attr('id');
     $('.'+ id +'_menu').show();
  })

@@ -27,7 +27,7 @@ class Datatable extends CI_Controller {
 		$user = $this->session->level;
 		/*
 			List of group 
-		*/
+		*/ 
 		
 		if ($data_check=="manage_group") {
 			$table="groups";
@@ -146,7 +146,9 @@ class Datatable extends CI_Controller {
 			$table="listings";
 			if ($this->uri->segment(5) == 'ar') {
 		    $table="accounts_receivable";
-			$columns=array("doc_date","doc_ref_no","customer_code", "total_amt", "currency_type","tran_type","remarks","opening_balance");
+		    $join_table = array('customer_master');
+		    $join_condition = array('accounts_receivable.customer_code = customer_master.customer_code');
+			$columns=array("doc_date","doc_ref_no","customer_name","customer_code", "total_amt", "currency_type","tran_type","remarks","opening_balance");
             //to ensure only invoices are shown up, use tran_type SALES as like query was difficult to implement in get_datatables method.
             //$where=array('tran_type' =>'Sales');
 			$table_id="ar_id";
@@ -154,16 +156,16 @@ class Datatable extends CI_Controller {
 				$table="gl_table";
 				$join_table = array('invoice_master','customer_master','currency_master',);
 				$join_condition=array('gl_table.doc_ref_no = invoice_master.invoice_ref_no','invoice_master.customer_id = customer_master.customer_id','customer_master.currency_id = currency_master.currency_id');
-				$columns=array("doc_ref_no","customer_code","currency_name","doc_date","gst","currency_amount","lump_sum_discount_price","total_amt","tran_type");
+				$columns=array("doc_ref_no","customer_name","customer_code","currency_name","doc_date","gst","currency_amount","lump_sum_discount_price","total_amt","tran_type");
 			    $table_id="gl_id";
 			}
 		
 			if ($this->uri->segment(5) == 'stock') {
 				$in_status = 'Product';
 				$table="invoice_product_master";
-				$join_table=array("billing_master","invoice_master","customer_master");
-				$join_condition=array('invoice_product_master.product_id=billing_master.billing_id','invoice_product_master.invoice_id=invoice_master.invoice_id','invoice_master.customer_id=customer_master.customer_id');
-				$columns=array("customer_code","invoice_ref_no","billing_description","quantity","stock_code","reject_msg");
+				$join_table=array("billing_master","invoice_master","customer_master","currency_master");
+				$join_condition=array('invoice_product_master.product_id=billing_master.billing_id','invoice_product_master.invoice_id=invoice_master.invoice_id','invoice_master.customer_id=customer_master.customer_id','customer_master.currency_id = currency_master.currency_id');
+				$columns=array("customer_name","currency_name","customer_code","invoice_ref_no","billing_description","quantity","stock_code","reject_msg");
 				$where=array('billing_type' =>$in_status,'invoice_status' =>strtoupper('P'));
 				//$where=array('billing_type' =>$in_status,'invoice_status' =>strtoupper('P'));
 				$table_id="invoice_id";
@@ -172,7 +174,7 @@ class Datatable extends CI_Controller {
 				$table="invoice_product_master";
 				$join_table=array("billing_master","gst_master","invoice_master","customer_master","currency_master");
 				$join_condition=array('invoice_product_master.product_id=billing_master.billing_id','invoice_product_master.gst_id=gst_master.gst_id','invoice_product_master.invoice_id=invoice_master.invoice_id','invoice_master.customer_id=customer_master.customer_id','currency_master.currency_id=customer_master.currency_id');
-				$columns=array("currency_name","invoice_ref_no","customer_code","stock_code","invoice_ref_no","billing_description","quantity","invoice_product_master.product_total as product_total","discount","gst_code","gst_rate","price");
+				$columns=array("currency_name","invoice_ref_no","customer_name","customer_code","stock_code","invoice_ref_no","billing_description","quantity","invoice_product_master.product_total as product_total","discount","gst_code","gst_rate","price");
 				$where=array('billing_type' =>$in_status,'invoice_status' =>strtoupper('P'));
 				//$where=array('billing_type' =>$in_status,'invoice_status' =>strtoupper('P'));
 				$table_id="i_p_id";
@@ -352,9 +354,10 @@ class Datatable extends CI_Controller {
 					$row[] = $person->table_id;
 					$row[] = $person->doc_date;
 					$row[] = $person->doc_ref_no;
+					$row[] = $person->customer_name;
 					$row[] = $person->customer_code;
-					$row[] = '+'. number_format(($person->total_amt), 2, '.', '');
 					$row[] = $person->currency_type;
+					$row[] = '+'. number_format(($person->total_amt), 2, '.', '');
 					$row[] = $person->tran_type;
 					$row[] = $person->remarks;
 					$row[] = $person->opening_balance;
@@ -364,6 +367,7 @@ class Datatable extends CI_Controller {
 					$row[] = $person->table_id;
 					$row[] = $person->doc_date;
 					$row[] = $person->doc_ref_no;
+					$row[] = $person->customer_name;
 					$row[] = $person->customer_code;
 					$row[] = $person->currency_name;
 					if($person->currency_amount != 1){//foreign total
@@ -393,7 +397,9 @@ class Datatable extends CI_Controller {
 					$row[] = $person->table_id;
 					$row[] = $person->created_on;
 					$row[] = $person->invoice_ref_no;
+					$row[] = $person->customer_name;
 					$row[] = $person->customer_code;
+					$row[] = $person->currency_name;
 					$row[] = $person->stock_code;
 					$row[] = $person->billing_description;
 					$row[] = $person->discount;
@@ -405,6 +411,7 @@ class Datatable extends CI_Controller {
 					$row[] = $person->table_id;
 					$row[] = $person->created_on;
 					$row[] = $person->invoice_ref_no;
+					$row[] = $person->customer_name;
 					$row[] = $person->customer_code;
 					$row[] = $person->stock_code;
 					$row[] = $person->billing_description;

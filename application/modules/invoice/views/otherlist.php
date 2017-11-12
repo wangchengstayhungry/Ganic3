@@ -9,7 +9,7 @@
   <?php 
     $list = array('active'=>ucwords($this->uri->segment(3)).' Listing');
     echo breadcrumb($list); 
-    ?>
+    ?> 
 </section>
 <section class="content">
   <div class="row"> 
@@ -27,9 +27,10 @@
 						 <th>Id</th>
 						  <th>Transaction Date</th>
 						  <th>Doc No</th>
+              <th>Customer Name</th>
 						  <th>Customer Code</th>
-						  <th>Amount</th>
 						  <th>Currency</th>
+              <th>Amount</th>
 						  <th>Transaction Type</th>
 						  <th>Remarks</th>
               
@@ -40,6 +41,7 @@
 						 <th>Id</th>
 						  <th>Transaction Date</th>
 						  <th>Doc No</th>
+              <th>Customer Name</th>
 						  <th>Customer Code</th>
               <th>Currency</th>
 						  <th>Total Foreign Amt</th>
@@ -56,7 +58,8 @@
 						 <th>Id</th>
 						 <th>Date of Invoice</th><!-- invoice_ref_no -->
              <th>invoice reference</th><!-- invoice_ref_no -->
-						 <th>Customer Code</th><!-- customer_code -->
+						 <th>Customer Name</th>
+             <th>Customer Code</th><!-- customer_code -->
 						 <th>Stock Code</th><!-- stock_code -->
 						 <th>Description</th><!-- billing_description -->
 						 <th>GST CAT</th><!-- gst_code-->
@@ -87,7 +90,9 @@
 						 <th>Id</th>
 						 <th>Date of Transaction</th>
 						  <th>Reference</th>
+              <th>Customer Name</th>
 						  <th>Customer Code</th>
+              <th>Currency</th>
 						  <th>Iteam Code</th>
 						  <th>Iteam Name</th>
 						  <th>Discount</th>
