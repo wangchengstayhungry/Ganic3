@@ -8,7 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		public $logged_id;
 		public function __construct()
 		{
-			parent::__construct();
+			parent::__construct(); 
 			
 			$this->table="billing_master";
 			$this->logged_id = $this->session->user_id;
@@ -18,7 +18,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		{
 			is_ajax();
 			$gst_id = $this->custom->getSingleValue('gst_master',"gst_id",array('gst_code' =>"SR"));
-			$this->data['gst_options']=$this->custom->createDropdownSelect("gst_master",array('gst_id','gst_code','gst_type','gst_rate'),"GST",array(' ( ', ' ) =>' , '%'),array("gst_type"=>"supply"),array($gst_id));
+			$this->data['gst_options']=$this->custom->createDropdownSelect1("gst_master",array('gst_id','gst_code','gst_type','gst_rate'),"GST",array(' ( ', ' ) =>' , '%'),array("gst_type"=>"supply"),array($gst_id));
 			$this->data['stock_options']=createSimpleDropdown(array("YES","NO"),"");
 			$this->data['bill_type_options']=createSimpleDropdown(array("Service","Product"),"Bill Type");
 			$this->load->view($this->view_path.'add',$this->data);
@@ -96,7 +96,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			if($row)
 			{
 				$this->data['billing_data'] = $row;
-				$this->data['gst_options']=$this->custom->createDropdownSelect("gst_master",array('gst_id','gst_code','gst_type','gst_rate'),"GST",array(' ( ', ' ) =>' , '%'),array(),array($row->gst_id));
+				$this->data['gst_options']=$this->custom->createDropdownSelect1("gst_master",array('gst_id','gst_code','gst_type','gst_rate'),"GST",array(' ( ', ' ) =>' , '%'),array(),array($row->gst_id));
 				$this->data['stock_options']=createSimpleDropdown(array("YES","NO"),"",$row->billing_update_stock);
 				$this->data['bill_type_options']=createSimpleDropdown(array("Service","Product"),"Bill Type",$row->billing_type);
 			}	

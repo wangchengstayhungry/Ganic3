@@ -96,7 +96,7 @@
                 $("#form_data").html(result);
             });
      });
-     /*..........over here.....*/
+     /*..........over here.....*/ 
   
      /* edit form */
      $("#edit").on('click',function(){

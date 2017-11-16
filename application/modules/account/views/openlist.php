@@ -108,7 +108,7 @@
     "scrollX": true,
     "processing": true, //Feature control the processing indicator.
     "serverSide": true, //Feature control DataTables' server-side processing mode.
-    "order": [[0,"desc"]], //Initial no order.
+    "order": [[0,"desc"], [2,"desc"]], //Initial no order.
   
     // Load data for the table's content from an Ajax source
     "ajax": {
@@ -141,14 +141,10 @@
      /* confirm button */
      $("#success").on('click',function(){// during the post button clicking
 
-      if (print_flag) {
-        alert("User Guide \n \u2022 Please ensure you backup all datafiles as POSTING is irreversible");
-      }
-      else if(print_flag == false) 
-      {
+      
         var url = '<?php echo base_url()."common/Ajax/openlist_ajax/postOpen" ?>';
         showData("confirm",url);
-      }
+      
 
      });
      /*... over here ...*/

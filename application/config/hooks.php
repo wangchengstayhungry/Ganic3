@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
-| Hooks
+| Hooks 
 | -------------------------------------------------------------------------
 | This file lets you define "hooks" to extend CI without hacking the core
 | files.  Please see the user guide for info:
@@ -27,3 +27,9 @@ $hook['post_controller_constructor'][] = array(
     'filepath' 	=> 'third_party/DevelBar/hooks'
 );
 */
+$hook['display_override'][] = array(
+	'class' => '',
+	'function' => 'compress',
+	'filename' => 'compress.php',
+	'filepath' => 'hooks'
+	);

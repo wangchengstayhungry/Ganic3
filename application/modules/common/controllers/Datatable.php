@@ -148,7 +148,7 @@ class Datatable extends CI_Controller {
 		    $table="accounts_receivable";
 		    $join_table = array('customer_master');
 		    $join_condition = array('accounts_receivable.customer_code = customer_master.customer_code');
-			$columns=array("doc_date","doc_ref_no","customer_name","customer_code", "total_amt", "currency_type","tran_type","remarks","opening_balance");
+			$columns=array("doc_date","doc_ref_no","customer_name","customer_code", "total_amt", "currency_type","tran_type","remarks","sign");
             //to ensure only invoices are shown up, use tran_type SALES as like query was difficult to implement in get_datatables method.
             //$where=array('tran_type' =>'Sales');
 			$table_id="ar_id";
@@ -190,6 +190,15 @@ class Datatable extends CI_Controller {
 		if ($data_check=="audit_list") {
 			$table="accounts_receivable";
 			$columns=array("doc_date","doc_ref_no","customer_code","currency_type","total_amt","sign","tran_type","remarks");
+			$table_id="ar_id";
+		}
+		if ($data_check=="other_debtor") {
+			$currency_type = $this->input->post('currency_type');
+			$table="accounts_receivable";
+			$columns=array("doc_date","doc_ref_no","customer_name","customer_contact_person","customer_code","currency_type","total_amt","sign","tran_type","remarks","customer_phone");
+			$where=array('offset'=>'n', 'settled'=>'n', 'currency_type' =>$currency_type);
+			$join_table=array("customer_master");
+			$join_condition=array('accounts_receivable.customer_code = customer_master.customer_code');
 			$table_id="ar_id";
 		}
 		if ($data_check=="receipt_list") {
@@ -247,7 +256,7 @@ class Datatable extends CI_Controller {
 			if($data_check=="manage_employee")
 			{
 				$row[] = $person->table_id;
-				$row[] = $person->name;
+				$row[] = $person->name; 
 				$row[] = $person->emp_name;
 				$row[] = $person->email;
 			}
@@ -357,7 +366,7 @@ class Datatable extends CI_Controller {
 					$row[] = $person->customer_name;
 					$row[] = $person->customer_code;
 					$row[] = $person->currency_type;
-					$row[] = '+'. number_format(($person->total_amt), 2, '.', '');
+					$row[] = $person->sign. number_format(($person->total_amt), 2, '.', '');
 					$row[] = $person->tran_type;
 					$row[] = $person->remarks;
 					$row[] = $person->opening_balance;
@@ -449,6 +458,26 @@ class Datatable extends CI_Controller {
 				$row[] = $person->sign;
 				$row[] = $person->tran_type;
 				$row[] = $person->remarks;
+			}
+			if ($data_check == "other_debtor") {
+				$row[] = $person->table_id;
+				$row[] = $person->doc_date;
+				$row[] = $person->doc_ref_no;
+				$row[] = $person->remarks;
+				
+				
+				///////////////////////////////////////////////////////////////////////
+
+				$row[] = $person->currency_type;
+				$row[] = $person->total_amt;
+				$row[] = $person->sign;
+				$row[] = $person->tran_type;
+
+				$row[] = $person->customer_code;
+				$row[] = $person->customer_name;
+				$row[] = $person->customer_contact_person;
+				$row[] = $person->customer_phone;
+				
 			}
 			
 			if($data_check=="receipt_list")

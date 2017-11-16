@@ -4,7 +4,7 @@
 		class Master_files extends MY_Controller {
 		
 			public function customer_master()
-			{
+			{ 
 				is_logged_in('admin');
 				has_permission();
 				$this->body_vars['buttonsPanel'] = buttonsPanel();

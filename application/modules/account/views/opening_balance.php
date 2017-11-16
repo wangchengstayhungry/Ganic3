@@ -67,7 +67,7 @@
                       <tbody>
                         <tr>
                           <td>
-                            <input type="date" class="transaction_date form-control" name="data[transaction_date][0]" value="<?php echo date('Y-m-d');?>">
+                            <input type="text" class="my_date transaction_date form-control" name="data[transaction_date][0]">
                           </td>
                           <td>
                             <input type="text" class="doc_reference form-control" name="data[doc_reference][0]">
@@ -134,14 +134,28 @@
   </form>
 </section>
 <!-- <script type="text/javascript" src="<?php echo JS_PATH ?>receipt.js"></script> -->
+<!-- <script src="dist/inputmask/inputmask.js"></script>
+<script src="dist/inputmask/inputmask.extensions.js"></script>
+<script src="dist/inputmask/inputmask.numeric.extensions.js"></script>
+<script src="dist/inputmask/inputmask.date.extensions.js"></script> -->
+
+<script src="<?php echo JS_PATH."/dist/jquery.inputmask.bundle.js";?>"></script>
+<script src="<?php echo JS_PATH."/dist/inputmask/phone-codes/phone.js";?>"></script>
+<script src="<?php echo JS_PATH."/dist/inputmask/phone-codes/phone-be.js";?>"></script>
+<script src="<?php echo JS_PATH."/dist/inputmask/phone-codes/phone-ru.js";?>"></script>
+     
+<script src="<?php echo JS_PATH."/dist/inputmask/inputmask.js";?>"></script>
+<script src="<?php echo JS_PATH."/dist/inputmask/inputmask.extensions.js";?>"></script>
+<script src="<?php echo JS_PATH."/dist/inputmask/inputmask.numeric.extensions.js";?>"></script>
+<script src="<?php echo JS_PATH."/dist/inputmask/inputmask.date.extensions.js";?>"></script>
 <script type="text/javascript">
 $(function() {
   //=========================customer details ====================================================
 
   $cansend = false;
   
-  
-  
+  //$(".my_date").inputmask("31-99-9999");  //static mask
+  $(".my_date").inputmask("9999/99/99",{ "placeholder": "yyyy/mm/dd" });
     $('form#form_').submit(function(){
      var form = $(this);
          if ($cansend == true)
@@ -201,15 +215,15 @@ $(function() {
   // });
   /////////////////
   $("#input_credit_note").click(function(evernt) {
-
+    
     $("#flag_text").html("Mode: Credit Note");
     var numrows = $("form#form_").find("input[name^='data[transaction_date]']").length;
     console.log(numrows);
     var append_str_credit = '<tr>' 
                           +'<td>'
-                          + '<input type="text" class="form-control" name="data[transaction_date]['
+                          + '<input type="text" class="form-control my_date" name="data[transaction_date]['
                           + numrows
-                          + ']" value="<?php echo date('Y-m-d');?>">'
+                          + ']">'
                           + '</td>'
                           + '<td>'
                           + '<input type="text" class="form-control" name="data[doc_reference]['
@@ -237,18 +251,19 @@ $(function() {
                           + '</tr>';
     
     $("#open_table tbody").append(append_str_credit);
-    
+    $(".my_date").inputmask("9999/99/99",{ "placeholder": "yyyy/mm/dd" });
   }); 
   $("#input_another_entry").click(function(evernt) {
-
+    
     $("#flag_text").html("Mode: Invoice Entry");
     var numrows = $("form#form_").find("input[name^='data[transaction_date]']").length;
+
     console.log(numrows);
     var append_str_entry = '<tr>' 
                           +'<td>'
-                          + '<input type="text" class="form-control" name="data[transaction_date]['
+                          + '<input type="text" class="form-control my_date" name="data[transaction_date]['
                           + numrows
-                          + ']" value="<?php echo date('Y-m-d');?>">'
+                          + ']">'
                           + '</td>'
                           + '<td>'
                           + '<input type="text" class="form-control" name="data[doc_reference]['
@@ -277,6 +292,7 @@ $(function() {
 
     $("#open_table tbody").append(append_str_entry);
     //console.log(index_add);
+    $(".my_date").inputmask("9999/99/99",{ "placeholder": "yyyy/mm/dd" });
   });
   
  

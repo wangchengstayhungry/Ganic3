@@ -45,7 +45,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$query1 = $this->db->get();
 			$rec_data = $query1->result();
 			$html = '';
-			$amount = 0;
+			$amount = 0; 
 
 			$currency_temp = 1;
 
@@ -77,6 +77,314 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$data['table_html']=$html;
 			echo json_encode($data);
 		}
+
+		public function get_customers_with_currency($currency_type = '')
+		{
+			$this->db->select('*');
+			$this->db->from('accounts_receivable');
+			$this->db->where(array('offset'=>'n', 'settled'=>'n', 'currency_type' =>$currency_type));
+			$this->db->order_by("customer_code", "asc");
+			$this->db->group_by("customer_code");
+
+			$query = $this->db->get();
+			$customer_code_ar = $query->result();
+			//print_r($customer_code_ar);
+			
+			$amount_grandtotal = 0;
+            $amount_debit_grandtotal = 0;
+            $amount_credit_grandtotal = 0;
+
+            $html_thead_currency = "<input type='hidden'>";
+            $html_thead_currency .= "<thead><p style='color:red;'>Currency:&nbsp&nbsp";
+			$html_thead_currency .= $currency_type;
+			$html_thead_currency .= " DEBTORS LISTING</p></thead>";
+			
+			$html_table = '';
+			// int cnt_customer = count($customer_code_ar);
+			foreach ($customer_code_ar as $key => $value) {
+
+
+				$this->db->select('*');
+				$this->db->from('accounts_receivable');
+				// $this->db->where(array('customer_code'=>$value->customer_code));
+				$this->db->join('customer_master', 'accounts_receivable.customer_code = customer_master.customer_code');
+				$this->db->where(array('offset'=>'n', 'settled'=>'n', 'currency_type' =>$currency_type,'accounts_receivable.customer_code'=>$value->customer_code));
+				//$this->db->order_by("customer_code", "asc");
+				$this->db->order_by("doc_date", "asc");
+				$this->db->order_by("doc_ref_no", "asc");
+				$this->db->order_by("tran_type", "asc");
+
+				$query = $this->db->get();
+				$each_customer_account = $query->result();
+				$html_thead = '';
+				//$html_thead .= <table id="ss" class="table" width="100%">
+				$html_thead .= "<thead>";
+				$html_thead .= "<tr>";
+				$html_thead .= "<th>code:";
+				$html_thead .= $value->customer_code;
+				$html_thead .= ",";
+				$html_thead .= $each_customer_account[0]->customer_name;
+				$html_thead .= "</th>";
+				$html_thead .= "<th>Contact Person:";
+				$html_thead .= $each_customer_account[0]->customer_contact_person;
+				$html_thead .= "</th>";
+				$html_thead .= "<th></th><th></th><th></th>";
+				$html_thead .= "<th>tel:";
+				$html_thead .= $each_customer_account[0]->customer_phone;
+				$html_thead .= "</th>";
+                $html_thead .= "</tr>";
+                $html_thead .= "<tr><th>DATE</th><th>DOC REF</th><th>REMARKS</th><th>DEBIT</th><th>CREDIT</th><th>BALANCE</th></tr></thead>";
+                            
+                $html_tbody = '';
+                $amount_subtotal = 0;
+                $amount_debit_subtotal = 0;
+                $amount_credit_subtotal = 0;
+
+
+				foreach ($each_customer_account as $key => $value) {
+
+					$html_tbody.='<tr>';
+					$html_tbody.='<td>'.$value->doc_date.'</td>';
+					$html_tbody.='<td>'.$value->doc_ref_no.'</td>';
+					$html_tbody.='<td>'.$value->remarks.'</td>';
+					if($value->sign=="+")
+					{
+						$amount_debit_subtotal += number_format(($value->total_amt), 2, '.', '');
+					    $amount_subtotal+=number_format(($value->total_amt), 2, '.', '');
+					    $html_tbody.='<td>'.number_format(($value->total_amt), 2, '.', '').'</td>';
+					    $html_tbody.='<td></td>';
+					}
+					
+					else if($value->sign=='-')
+					{
+						$amount_credit_subtotal += number_format(($value->total_amt), 2, '.', '');
+					    $amount_subtotal-=number_format(($value->total_amt), 2, '.', '');
+				    	$html_tbody.='<td></td>';
+				    	$html_tbody.='<td>'.number_format(($value->total_amt), 2, '.', '').'</td>';
+					}
+					
+					$html_tbody.='<td>'.number_format(($amount_subtotal), 2, '.', '').'</td>';
+					$html_tbody.='</tr>';
+				}
+
+				
+				$html_tbody .= "<tr><td style='color:red;'>Subtotal</td><td></td><td></td><td>";
+				$html_tbody .= number_format($amount_debit_subtotal, 2, '.', '');
+				$html_tbody .= "</td><td>";
+				$html_tbody .= number_format($amount_credit_subtotal, 2, '.', '');
+	            $html_tbody .= "</td><td>";
+                $html_tbody .= number_format($amount_subtotal, 2, '.', '');
+                $html_tbody .= "</td></tr>";
+				
+				
+
+				$amount_debit_grandtotal += $amount_debit_subtotal;
+				$amount_credit_grandtotal += $amount_credit_subtotal;
+				$amount_grandtotal += $amount_subtotal;
+
+				$html_table .= $html_thead."<tbody>".$html_tbody;
+			}
+
+			$html_table .= "<tr><td style='color:blue;'>Grand total</td><td></td><td></td><td>";
+			$html_table .= number_format($amount_debit_grandtotal, 2, '.', '');
+			$html_table .= "</td><td>";
+			$html_table .= number_format($amount_credit_grandtotal, 2, '.', '');
+            $html_table .= "</td><td>";
+            $html_table .= number_format($amount_grandtotal, 2, '.', '');
+            $html_table .= "</td></tr></tbody>";
+			
+			$data['table_html']=$html_thead_currency.$html_table;
+			return $data;
+		}
+
+		public function get_customer_debtor_date($currency_type,$from = '0', $to = '120')
+		{
+			$this->db->select('SUM(total_amt) AS amount, customer_code');
+			$this->db->from('accounts_receivable');
+			if ($from == '0') {
+				$this->db->where("DATEDIFF(NOW(), doc_date) BETWEEN '0' AND '30' ");   	
+			}
+			else if($from == '121')
+			{
+				$this->db->where("DATEDIFF(NOW(), doc_date) >= '120'");   	
+			}
+			else 
+			{
+				$this->db->where("DATEDIFF(NOW(), doc_date) BETWEEN ".$from." AND ".$to);  
+			}
+
+			
+			//$this->db->where("DATEDIFF(NOW(), doc_date) BETWEEN ".$from." AND ".$to);   
+			$this->db->where(array('offset'=>'n','sign'=>'+', 'settled'=>'n', 'currency_type' =>$currency_type));
+			$this->db->order_by("customer_code", "asc");
+			$this->db->group_by("customer_code");
+
+			$query = $this->db->get();
+			$customer_code_ar = $query->result();
+			return $customer_code_ar;
+		}
+
+		public function get_customer_name($customer_code)
+		{
+			$this->db->select('customer_name');
+			$this->db->from('customer_master');
+			$this->db->where(array('customer_code'=>$customer_code));
+
+			$query = $this->db->get();
+			$customer_name= $query->result();
+			return $customer_name;
+		}
+
+		public function get_customers_with_currency_age($currency_type = '')
+		{
+			
+			$html_thead_currency = "<input type='hidden'>";
+            $html_thead_currency .= "<thead><p style='color:red;'>Currency:&nbsp&nbsp";
+			$html_thead_currency .= $currency_type;
+			$html_thead_currency .= " DEBTORS LISTING</p></thead>";
+			
+			$html_table = '';
+			
+			$html_thead = '';
+			$html_thead .= "<thead>";
+			$html_thead .= "<tr>";
+			$html_thead .= "<th>code & name</th>";
+			$html_thead .= "<th>1 - 30</th><th>31 - 60</th><th>61 - 90</th><th>91 - 120</th><th>>120days</th></tr></thead>";
+
+			$html_tbody = '';
+
+			$debtor_date = array();
+			
+			
+			array_push($debtor_date, $this->get_customer_debtor_date($currency_type, '0', '30'));
+			array_push($debtor_date, $this->get_customer_debtor_date($currency_type, '31', '60'));
+			array_push($debtor_date, $this->get_customer_debtor_date($currency_type, '61', '90'));
+			array_push($debtor_date, $this->get_customer_debtor_date($currency_type, '91', '120'));
+			array_push($debtor_date, $this->get_customer_debtor_date($currency_type, '121', '365'));
+			$customers = array();
+			$amounts = array();
+			$i = 0;
+			foreach ($debtor_date as $key => $row) {
+				$i++;
+				foreach ($row as $key => $value) {
+					if(!in_array($value->customer_code, $customers)){
+						array_push($customers, $value->customer_code);
+					}
+				}
+			}
+			$total_amt = array(0,0,0,0,0);
+			foreach ($customers as $key => $customer) {
+				$amounts_item = array(0,0,0,0,0);
+				$i = 0;
+				foreach ($debtor_date as $key => $row) {
+					foreach ($row as $key => $value) {
+						if($customer == $value->customer_code){
+							$amounts_item[$i] = $value->amount;
+						}
+					}
+					$i++;
+					
+				}
+				array_push($amounts, $amounts_item);
+				for ($i=0; $i < 5; $i++) { 
+					$total_amt[$i] += $amounts_item[$i];
+				}
+				
+			}
+
+
+			// start html
+			$html_tbody = "";
+			$i = 0;
+			foreach ($customers as $key => $customer) {
+				$customer_name = $this->get_customer_name($customer)[0]->customer_name;
+				$html_tbody.="<tr><td>".$customer."&nbsp".$customer_name."</td><td>".number_format(($amounts[$i][0]), 2, '.', '')."</td><td>".number_format(($amounts[$i][1]), 2, '.', '')."</td><td>".number_format(($amounts[$i][2]), 2, '.', '')."</td><td>".number_format(($amounts[$i][3]), 2, '.', '')."</td><td>".number_format(($amounts[$i][4]), 2, '.', '')."</td></tr>";
+				$i++;
+			}
+			$html_tbody.="<tr><td style='color: blue;'>Total</td><td>".number_format(($total_amt[0]), 2, '.', '')."</td><td>".number_format(($total_amt[1]), 2, '.', '')."</td><td>".number_format(($total_amt[2]), 2, '.', '')."</td><td>".number_format(($total_amt[3]), 2, '.', '')."</td><td>".number_format(($total_amt[4]), 2, '.', '')."</td></tr>";
+			
+			$html_table .= $html_thead."<tbody>".$html_tbody."</tbody>";
+			 
+			return $html_thead_currency.$html_table;
+		}
+		public function get_age_debtor()
+		{
+			is_ajax();
+			$this->body_file="common/blank.php";
+			$this->header_file="common/blank.php";
+			$this->footer_file="common/blank.php";
+			$post=$this->input->post();
+			$currency_type = $post['currency_type'];
+			$result = '';
+			if ($currency_type != '-- Select Currency --') {
+				$result_str= $this->get_customers_with_currency_age($post['currency_type']);	
+				$result['table_html'] = $result_str;
+				echo json_encode($result);
+			}
+			else
+			{
+				//print_r("sdf");exit();
+				$this->db->select('*');
+				$this->db->from('accounts_receivable');
+				$this->db->order_by("currency_type");
+				$this->db->group_by("currency_type");
+				$query = $this->db->get();
+				$currency_ar = $query->result();
+				$result1 = array();
+
+				foreach ($currency_ar as $key => $value) {
+					$result1[] = $this->get_customers_with_currency_age($value->currency_type);
+				}
+
+				$result_str = '';
+				foreach ($result1 as $key => $value) {
+					$result_str .= $value;
+				}
+				//$result['table_html'] = $result1;
+				//print_r($result_str);exit();
+				$result['table_html'] = $result_str;
+				echo json_encode($result);
+			}
+		}
+
+		public function get_usd_debtor()
+		{
+			is_ajax();
+			$this->body_file="common/blank.php";
+			$this->header_file="common/blank.php";
+			$this->footer_file="common/blank.php";
+			$post=$this->input->post();
+			$currency_type = $post['currency_type'];
+			$result = '';
+			if ($currency_type != '-- Select Currency --') {
+				$result = $this->get_customers_with_currency($post['currency_type']);	
+				echo json_encode($result);
+			}
+			else
+			{
+				$this->db->select('*');
+				$this->db->from('accounts_receivable');
+				$this->db->order_by("currency_type");
+				$this->db->group_by("currency_type");
+				$query = $this->db->get();
+				$currency_ar = $query->result();
+				$result1 = array();
+
+				foreach ($currency_ar as $key => $value) {
+					$result1[] = $this->get_customers_with_currency($value->currency_type);
+				}
+
+				$result_str = '';
+				foreach ($result1 as $key => $value) {
+					$result_str .= $value['table_html'];
+				}
+				//$result['table_html'] = $result1;
+				//print_r($result_str);
+				$result['table_html'] = $result_str;
+				//echo json_encode($result1[0]['table_html']);
+				echo json_encode($result);
+			}
+		}
 		
 		public function get_customer_details_ar()
 		{
@@ -89,14 +397,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$country_data=$this->custom->getSingleRow("country_master",array('country_id'=>$result->country_id));
 			$data['customer_bldg_street']=$result->customer_bldg_number.' , '.$result->customer_street_name;
 			$data['customer_cntry_post']=$country_data->country_name.' , '.$result->customer_postal_code;
-			// $data['invoice_reference']=$this->custom->createDropdownSelect("invoice_master",array('invoice_id','invoice_ref_no'),"Invoice Ref No",array(''),array('customer_id' => $post['customer_id'],'invoice_status'=>'P'));
-			// /*==========================================*/
-			// // echo "<pre>";print_r($data['invoice_reference']);die;
-			// $currency_data=$this->custom->getSingleRow("currency_master",array('currency_id'=>$result->currency_id));
-			// $data['customer_currency']=$currency_data->currency_name;
-			// $data['currency_amount']=$currency_data->currency_rate;
-			
-			
+						
 			$cus_code=$this->custom->getSingleValue("customer_master","customer_code",array('customer_id'=>$post['customer_id']));
 
 			$this->db->select('*');
@@ -104,6 +405,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			//$this->db->where('customer_code', $cus_code);
 			//$this->db->where(array('customer_code'=>$cus_code, 'offset'=>'n', 'settled'=>'n'));
 			$this->db->where(array('customer_code'=>$cus_code, 'offset'=>'n'));
+			$this->db->order_by("doc_date", "asc");
+			$this->db->order_by("doc_ref_no", "asc");
+			$this->db->order_by("tran_type", "asc");
 			$query = $this->db->get();
 			$ar_data = $query->result();
 
@@ -119,7 +423,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					if($value->sign=="+")
 				{
 				    $amount+=number_format(($value->total_amt), 2, '.', '');
-				    $html.='<td>'.number_format($value->total_amt, 2).'</td>';
+				    $html.='<td>'.$value->sign.number_format(($value->total_amt), 2, '.', '').'</td>';
 				    $html.='<td></td>';
 				}
 				
@@ -127,10 +431,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				{
 				    $amount-=number_format(($value->total_amt), 2, '.', '');
 			    	$html.='<td></td>';
-			    	$html.='<td>'.number_format(($value->total_amt), 2).'</td>';
+			    	$html.='<td>'.$value->sign.number_format(($value->total_amt), 2, '.', '').'</td>';
 				}
 				
-				$html.='<td>'.$amount.'</td>';
+				$html.='<td>'.number_format(($amount), 2, '.', '').'</td>';
 				$html.='</tr>';
 			}
 			

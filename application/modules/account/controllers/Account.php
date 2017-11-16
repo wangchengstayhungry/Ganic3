@@ -302,6 +302,34 @@
 		
 			$this->body_file="account/new_debtor.php";
 		}
+
+		public function age_debtor()
+		{
+			is_logged_in('admin');
+			has_permission();
+			
+			$this->body_vars['currency_options']=$this->custom->createDropdownSelect2("accounts_receivable",array('ar_id','currency_type'),"Currency");
+		
+			$this->body_file="account/age_debtor.php";
+		}
+		public function other_debtor()
+		{
+			is_logged_in('admin');
+			has_permission();
+			// $company_where=array('profile_id'=>1);
+			// $this->body_vars['company_details']=$company_details=$this->custom->getSingleRow('company_profile',$company_where);
+			/*==========================================*/
+			// $receipt_where=array('user_id'=>$this->session->user_id);
+			/*=========================================*/
+			$this->body_vars['currency_options']=$this->custom->createDropdownSelect2("accounts_receivable",array('ar_id','currency_type'),"Currency");
+			// $this->data['gst_options']=$this->custom->createDropdownSelect1("gst_master",array('gst_id','gst_code','gst_type','gst_rate'),"GST",array(' ( ', ' ) =>' , '%'),array(),array($row->gst_id));
+			/*==========================================*/
+			
+			/*==========================================*/
+		
+			$this->body_file="account/other_debtor.php";
+		}
+
 		
 		public function offset()
 		{

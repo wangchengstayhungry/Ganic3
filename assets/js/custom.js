@@ -190,8 +190,10 @@ function showData(mode,url,form_action='#'){
         if(mode=="delete")
         {
             $.confirm({
-                title:"<i class='fa fa-info'></i> Delete Confirmation",
-                text: "Are You Sure to delete ?",
+                title:"<i class='fa fa-info'></i> Confirm Delete",
+                text: "Want to delete this ?",
+                confirmButton: 'Yes',
+                confirmButtonClass: 'btn-success',
                 confirm: function(button) {
                     $.post(url,{ rowID: rowID } , function(result){
                         $("#form_data").html(''); // remove content of form.
@@ -201,6 +203,8 @@ function showData(mode,url,form_action='#'){
                     });
                     showHideButtons("list");
                 },
+                cancelButton: 'No',
+                cancelButtonClass: 'btn-danger',
                 cancel: function(button) {
                     $("#refresh").click();//refresh  the datatable.
                 }
@@ -228,28 +232,38 @@ function showData(mode,url,form_action='#'){
         }
         else if (mode=="confirm"){//post the confirmed invoice
           $.confirm({
-                title:"<i class='fa fa-info'></i> Success Confirmation",
-                text: "Are You Really want to success this ?",
-                confirm: function(button) {
-                    $.post(url,{ rowID: rowID } , function(result){
+             
+              title:"<i class='fa fa-info'></i> Confirm Successful",
+              text: "Want to Success this ?",
+              confirmButton: 'Yes',
+              confirmButtonClass: 'btn-success',
+              
+              confirm: function(button) {
+                  $.post(url,{ rowID: rowID } , function(result){
 
-                        console.log(result);
-                        $("#form_data").html(''); // remove content of form.
-                        $("#refresh").click();//refresh  the datatable.
-                        $("#list_table").show(); // show data table
-                        $("#message_area").html("<div class='alert alert-success fade in'><button type='button' class='close close-sm' data-dismiss='alert'><i class='fa fa-times'></i></button>Quotation "+mode+"ed Succesfully!</div>");
-                    });
-                    showHideButtons("list");
-                },
-                cancel: function(button) {
-                    $("#refresh").click();//refresh  the datatable.
-                }
-            });
+                      console.log(result);
+                      $("#form_data").html(''); // remove content of form.
+                      $("#refresh").click();//refresh  the datatable.
+                      $("#list_table").show(); // show data table
+                      $("#message_area").html("<div class='alert alert-success fade in'><button type='button' class='close close-sm' data-dismiss='alert'><i class='fa fa-times'></i></button>Quotation "+mode+"ed Succesfully!</div>");
+                  });
+                  showHideButtons("list");
+              },
+              cancelButton: 'No',
+              cancelButtonClass: 'btn-danger',
+              cancel: function(button) {
+                  $("#refresh").click();//refresh  the datatable.
+              }
+
+          });
+
         }
         else if (mode=="reject"){
           $.confirm({
-                title:"<i class='fa fa-info'></i> Reject Confirmation",
-                text: "Are You Really want to "+mode+" this ?",
+                title:"<i class='fa fa-info'></i> Confirm Reject",
+                text: "Want to reject this ?",
+                confirmButton: 'Yes',
+                confirmButtonClass: 'btn-success',
                 confirm: function(button) {
                     $.post(url,{ rowID: rowID } , function(result){
                         $("#form_data").html(''); // remove content of form.
@@ -259,6 +273,8 @@ function showData(mode,url,form_action='#'){
                     });
                     showHideButtons("list");
                 },
+                cancelButton: 'No',
+                cancelButtonClass: 'btn-danger',
                 cancel: function(button) {
                     $("#refresh").click();//refresh  the datatable.
                 }

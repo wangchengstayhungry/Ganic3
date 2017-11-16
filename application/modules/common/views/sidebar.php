@@ -771,7 +771,7 @@
                <li>
                   <a href="<?php echo base_url(); ?>account/new_debtor" class="auto">
                   <i class="fa fa-file-o"></i>
-                  <span class="font-bold">New Debtor Statement</span>
+                  <span class="font-bold">Debtor Statement</span>
                   </a>
                </li>
                
@@ -782,20 +782,26 @@
                   </a>
                </li>
                
-               <li>
+               <!-- <li>
                   <a href="<?php echo base_url(); ?>account" class="auto">
                   <i class="fa fa-file-o"></i>
                   <span class="font-bold">Debtor Statement</span>
                   </a>
-               </li>
+               </li> -->
 
                <li>
-                  <a href="#" class="auto">
+                  <a href="<?php echo base_url(); ?>account/other_debtor" class="auto">
                   <i class="fa fa-paperclip"></i>
-                  <span class="font-bold">Other Debtor Report</span>
+                  <span class="font-bold">Debtors' Listing</span>
                   </a>
                </li>
-                     
+               
+               <li>
+                  <a href="<?php echo base_url(); ?>account/age_debtor" class="auto">
+                  <i class="fa fa-paperclip"></i>
+                  <span class="font-bold">Debtors' Ageing</span>
+                  </a>
+               </li>
 
                <!-- <li>
                   <a href="#" class="auto">

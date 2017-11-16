@@ -597,7 +597,7 @@
     <div class="col-md-4 col-sm-12 col-xs-12">
       <div class="small-box bg-maroon">
             <div class="inner">
-              <h3>New Debtor <br/>Statement</h3>
+              <h3>Debtor Statement</h3>
               <!--<p>&nbsp;</p>-->
             </div>
             <div class="icon">
@@ -607,18 +607,18 @@
           </div>
     </div>
     
-  <div class="col-md-4 col-sm-12 col-xs-12">
-      <div class="small-box bg-maroon">
-            <div class="inner">
-              <h3>Debtor Statement</h3>
-              <p>&nbsp;</p>
-            </div>
-            <div class="icon">
-              
-            </div>
-            <a href="<?php echo base_url(); ?>account" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-    </div>
+    <!-- <div class="col-md-4 col-sm-12 col-xs-12">
+        <div class="small-box bg-maroon">
+              <div class="inner">
+                <h3>Debtor Statement</h3>
+                <p>&nbsp;</p>
+              </div>
+              <div class="icon">
+                
+              </div>
+              <a href="<?php echo base_url(); ?>account" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div> -->
     
     </div>
     

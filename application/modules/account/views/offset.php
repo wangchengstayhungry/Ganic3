@@ -55,7 +55,7 @@
                   <br>
                   <div class="col-sm-4">
                         <b>Select Date</b>
-                <input type="date" name="offset_Date" id="offset_Date" class="form-control" value="<?php echo date('Y-m-d');?>"/>
+                <input type="text" name="offset_Date" id="offset_Date" class="form-control"/>
                   <button type="submit" class="btn btn-success pull-right" id="submitbtn"><i class="fa fa-credit-card"></i> Submit
                   </button>
                   </div>
@@ -74,7 +74,18 @@
    </form> 
 </section>
 <!-- <script type="text/javascript" src="<?php echo JS_PATH ?>receipt.js"></script> -->
+<script src="<?php echo JS_PATH."/dist/jquery.inputmask.bundle.js";?>"></script>
+<script src="<?php echo JS_PATH."/dist/inputmask/phone-codes/phone.js";?>"></script>
+<script src="<?php echo JS_PATH."/dist/inputmask/phone-codes/phone-be.js";?>"></script>
+<script src="<?php echo JS_PATH."/dist/inputmask/phone-codes/phone-ru.js";?>"></script>
+     
+<script src="<?php echo JS_PATH."/dist/inputmask/inputmask.js";?>"></script>
+<script src="<?php echo JS_PATH."/dist/inputmask/inputmask.extensions.js";?>"></script>
+<script src="<?php echo JS_PATH."/dist/inputmask/inputmask.numeric.extensions.js";?>"></script>
+<script src="<?php echo JS_PATH."/dist/inputmask/inputmask.date.extensions.js";?>"></script>
 <script type="text/javascript">
+
+  $("#offset_Date").inputmask("9999/99/99",{ "placeholder": "yyyy/mm/dd" });
     $(function()
     {
        $("#customer_id").change(function(event) {

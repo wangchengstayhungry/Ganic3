@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Custom_model extends CI_Model
 {
-    public function __construct()
+    public function __construct() 
     {
         parent::__construct();
         
@@ -260,6 +260,113 @@ class Custom_model extends CI_Model
             return false;
         }
         
+    }
+    public function createDropdownSelect2($table, $columns = array(), $caption="Value",$separator = array(' ') ,$where = null, $selected = array(),$sort_column="",$sort="ASC") 
+    {
+        // d($where != null);
+        if($sort_column==""){
+            $sort_column=$columns[1];
+        }
+        if ($where != null && !is_null($where)) {
+             $query = $this->db->select($columns)->from($table)->where($where)->order_by($sort_column . ' ' . $sort)->group_by('currency_type')->get();
+        } else {
+            $query = $this->db->select($columns)->from($table)->order_by($sort_column . ' ' . $sort)->group_by('currency_type')->get();
+        }
+        // echo $this->db->last_query();die;
+        $id=$columns[0];
+        unset($columns[0]);
+        $rows         = $this->getResult($query);
+        $drop_options = "<option value=''>-- Select ".$caption." --</option>";
+        if ($rows) {
+            if (!empty($selected)) {
+                foreach ($rows as $row) {
+                        if (in_array($row->$id,$selected)) {
+                                $drop_options .= "<option value='" . $row->$id . "' selected='selected'>";
+                                for ($i=1; $i <=count($columns) ; $i++) { 
+                                    $col_value=$columns[$i];
+                                    $col_sep=$separator[$i-1];
+                                    $drop_options .="".$row->$col_value . " $col_sep";
+                                }
+                                 $drop_options.="</option>";
+                        } else {
+                                $drop_options .= "<option value='" . $row->$id . "' >";
+                                for ($i=1; $i <=count($columns) ; $i++) { 
+                                    $col_value=$columns[$i];
+                                    $col_sep=$separator[$i-1];
+                                    $drop_options .="".$row->$col_value . " $col_sep";
+                                }
+                                 $drop_options.="</option>";
+                        }
+                    
+                }
+            } 
+            else {
+                foreach ($rows as $row) {
+                        $drop_options .= "<option value='" . $row->$id . "'>";
+                        for ($i=1; $i <=count($columns) ; $i++) { 
+                            $col_value=$columns[$i];
+                            $col_sep=$separator[$i-1];
+                            $drop_options .="".$row->$col_value . " $col_sep";
+                        }
+                         $drop_options.="</option>";
+                }
+            }
+        }
+        return $drop_options;
+    }
+    ///////////////////////////////////
+    public function createDropdownSelect1($table, $columns = array(), $caption="Value",$separator = array(' ') ,$where = null, $selected = array(),$sort_column="",$sort="ASC") 
+    {
+        // d($where != null);
+        if($sort_column==""){
+            $sort_column=$columns[1];
+        }
+        if ($where != null && !is_null($where)) {
+             $query = $this->db->select($columns)->from($table)->where($where)->order_by($sort_column . ' ' . $sort)->get();
+        } else {
+            $query = $this->db->select($columns)->from($table)->order_by($sort_column . ' ' . $sort)->get();
+        }
+        // echo $this->db->last_query();die;
+        $id=$columns[0];
+        unset($columns[0]);
+        $rows         = $this->getResult($query);
+        $drop_options = "<option value=''>-- Select ".$caption." --</option>";
+        if ($rows) {
+            if (!empty($selected)) {
+                foreach ($rows as $row) {
+                        if (in_array($row->$id,$selected)) {
+                                $drop_options .= "<option value='" . $row->$id . "' selected='selected'>";
+                                for ($i=1; $i <=count($columns) ; $i++) { 
+                                    $col_value=$columns[$i];
+                                    $col_sep=$separator[$i-1];
+                                    $drop_options .="".$row->$col_value . " $col_sep";
+                                }
+                                 $drop_options.="</option>";
+                        } else {
+                                $drop_options .= "<option value='" . $row->$id . "' >";
+                                for ($i=1; $i <=count($columns) ; $i++) { 
+                                    $col_value=$columns[$i];
+                                    $col_sep=$separator[$i-1];
+                                    $drop_options .="".$row->$col_value . " $col_sep";
+                                }
+                                 $drop_options.="</option>";
+                        }
+                    
+                }
+            } 
+            else {
+                foreach ($rows as $row) {
+                        $drop_options .= "<option value='" . $row->$id . "'>";
+                        for ($i=1; $i <=count($columns) ; $i++) { 
+                            $col_value=$columns[$i];
+                            $col_sep=$separator[$i-1];
+                            $drop_options .="".$row->$col_value . " $col_sep";
+                        }
+                         $drop_options.="</option>";
+                }
+            }
+        }
+        return $drop_options;
     }
     // this function is to create age Group dropdown it is customize we can not use it in any other place
     public function createDropdownSelect($table, $columns = array(), $caption="Value",$separator = array(' ') ,$where = null, $selected = array(),$sort_column="",$sort="ASC") 

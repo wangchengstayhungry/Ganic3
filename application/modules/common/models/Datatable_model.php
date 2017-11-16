@@ -52,7 +52,7 @@ class Datatable_model extends CI_Model {
 				{
 					
 					if($i===0) // first loop
-					{
+					{ 
 						$this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
 						$this->db->like($item, $_POST['search']['value']);
 					}
@@ -66,10 +66,19 @@ class Datatable_model extends CI_Model {
 				}
 				$i++;
 			}
-			
+			//var_dump($_POST['order']);exit;
+			//$this->db->order_by("name", "asc");
 			if(isset($_POST['order'])) // here order processing
 			{
 				$this->db->order_by($column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+				if(isset($_POST['order']['1']['column']))
+				{
+					$this->db->order_by($column_order[$_POST['order']['1']['column']], $_POST['order']['1']['dir']);	
+				}
+				
+				// $this->db->order_by("doc_ref_no", "desc");
+				// $this->db->order_by("open_doc_ref", "desc");
+
 			} 
 			else if(isset($this->order))
 			{

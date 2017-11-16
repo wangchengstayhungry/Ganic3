@@ -89,9 +89,12 @@ hr {
 }
 /*Date picker kill part*/
 input::-webkit-calendar-picker-indicator{
-    display: none;
+    display: none !important;
 }
 
 input[type="date"]::-webkit-input-placeholder{ 
     visibility: hidden !important;
 }
+
+
+/*table vertical scrollable*/
